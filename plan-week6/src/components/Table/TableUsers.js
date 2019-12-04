@@ -6,56 +6,85 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import IconButton from "@material-ui/core/IconButton";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import { Link as RouterLink } from "react-router-dom";
+import AddEmComponent from '../AddEmComponent/AddEmComponent'
 
-const useStyles = (theme) => ({
+
+const useStyles = theme => ({
   root: {
     width: "100%",
     marginTop: "2rem",
     overflowX: "auto"
   },
   table: {
-    minWidth: 650
-  }
+    minWidth: 650,
+    border: "1px solid gray"
+  },
+  title: {
+    color: "#000",
+    fontWeight: "bold"
+  },
 });
-
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9)
-];
 
 class TableUsers extends React.Component {
   render() {
-    const classes = useStyles();
-
+    const { classes } = this.props;
+    const list = this.props.listEmployee;
     return (
       <Paper className={classes.root}>
+        <AddEmComponent/>
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              <TableCell>Dessert (100g serving)</TableCell>
-              <TableCell align="right">Calories</TableCell>
-              <TableCell align="right">Fat&nbsp;(g)</TableCell>
-              <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-              <TableCell align="right">Protein&nbsp;(g)</TableCell>
+              <TableCell className={classes.title}>ID</TableCell>
+
+              <TableCell align="right" className={classes.title}>
+                Name
+              </TableCell>
+
+              <TableCell align="right" className={classes.title}>
+                Email
+              </TableCell>
+              <TableCell align="right" className={classes.title}>
+                City
+              </TableCell>
+              <TableCell align="right" className={classes.title}>
+                UserName
+              </TableCell>
+              <TableCell align="center" className={classes.title}>
+                Actions
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map(row => (
-              <TableRow key={row.name}>
-                <TableCell component="th" scope="row">
-                  {row.name}
+            {list.map(em => (
+              <TableRow key={em.id}>
+                <TableCell scope="row">{em.id}</TableCell>
+
+                <TableCell align="right">
+                  <RouterLink
+                    to={{
+                      pathname: `/employees/${em.id}`
+                    }}
+                  >
+                    {em.first_name} {em.last_name}
+                  </RouterLink>
                 </TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-                <TableCell align="right">{row.carbs}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
+
+                <TableCell align="right">{em.account.email}</TableCell>
+                <TableCell align="right">{em.account.address.city}</TableCell>
+                <TableCell align="right">{em.account.userName}</TableCell>
+                <TableCell align="center">
+                  <IconButton>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton>
+                    <DeleteForeverIcon />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
