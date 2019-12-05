@@ -6,6 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 //import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide from "@material-ui/core/Slide";
+import InputComponent from "../InputComponent/InputComponent";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -46,21 +47,29 @@ class DialogComponent extends React.Component {
           onClose={this.handleClose}
           aria-labelledby="alert-dialog-slide-title"
           aria-describedby="alert-dialog-slide-description"
-          maxWidth="sm"
+          maxWidth="md"
           fullWidth
         >
           <DialogTitle id="alert-dialog-slide-title">
             ADD EMPLOYEE
           </DialogTitle>
           <DialogContent>
-            
+            <InputComponent text="First Name"/>
+            <InputComponent text="Last Name"/>
+            <InputComponent text="Title"/>
+            <InputComponent text="Email"/>
+            <InputComponent text="Image"/>
+            <InputComponent text="User Name"/>
+            <InputComponent text="Street"/>
+            <InputComponent text="Country"/>
+            <InputComponent text="City"/>            
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Disagree
+            <Button style={{margin: '1rem'}} variant="contained" onClick={this.handleClose} color="primary">
+              CREATE
             </Button>
-            <Button onClick={this.handleClose} color="primary">
-              Agree
+            <Button style={{margin: '1rem'}} variant="contained" onClick={this.handleClose} color="primary">
+              CANCEL
             </Button>
           </DialogActions>
         </Dialog>

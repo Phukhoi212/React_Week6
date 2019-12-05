@@ -10,8 +10,14 @@ import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import { Link as RouterLink } from "react-router-dom";
-import AddEmComponent from '../AddEmComponent/AddEmComponent'
-
+import AddEmComponent from "../AddEmComponent/AddEmComponent";
+import ConfrimDialog from "../ConfirmDialog/ConfirmDialog";
+import {
+  deleteEmployeeById,
+  fecthListEmployee
+} from "../../containers/Home/actions";
+import { connect } from "react-redux";
+import compose from "recompose/compose";
 
 const useStyles = theme => ({
   root: {
@@ -26,16 +32,45 @@ const useStyles = theme => ({
   title: {
     color: "#000",
     fontWeight: "bold"
-  },
+  }
 });
 
 class TableUsers extends React.Component {
+  state = {
+    openConfirmDialog: false,
+    emName: '',
+    emId: '',
+  };
+  componentDidMount() {
+    this.props.fecthListEmployee();
+  }
+
+  onClickDeleteButton = (Id, Fname, Lname) => {
+    this.setState({
+      openConfirmDialog: true,
+      emId: Id,
+      emName: `${Fname}${Lname}`
+    });
+  };
+
+  onCloseConfirmDialog = () => {
+    this.setState({ openConfirmDialog: false });
+  };
+
+  onClickConfirmDeleteEmployee = () => {
+    this.props.deleteEmployeeById(this.state.emId)
+    this.setState({
+      openConfirmDialog: false
+    })
+  }
+
   render() {
+    console.log("id", this.state.emId,this.state.emName);
     const { classes } = this.props;
     const list = this.props.listEmployee;
     return (
       <Paper className={classes.root}>
-        <AddEmComponent/>
+        <AddEmComponent />
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
@@ -81,17 +116,35 @@ class TableUsers extends React.Component {
                   <IconButton>
                     <EditIcon />
                   </IconButton>
-                  <IconButton>
+                  <IconButton onClick={() => this.onClickDeleteButton(em.id,em.first_name,em.last_name)}>
                     <DeleteForeverIcon />
                   </IconButton>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
+          <ConfrimDialog
+            openDialog={this.state.openConfirmDialog}
+            onCloseConfirmDialog={this.onCloseConfirmDialog}
+            onClickConfirmDeleteEmployee={this.onClickConfirmDeleteEmployee}
+            name={this.state.emName}
+          />
         </Table>
       </Paper>
     );
   }
 }
 
-export default withStyles(useStyles)(TableUsers);
+const mapStateToProps = state => {
+  return {
+    listEmployee: state.EmployeeReducer
+  };
+};
+
+export default compose(
+  withStyles(useStyles),
+  connect(mapStateToProps, {
+    fecthListEmployee,
+    deleteEmployeeById
+  })
+)(TableUsers);

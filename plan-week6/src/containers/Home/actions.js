@@ -14,3 +14,12 @@ export const fecthListEmployee = () => async dispatch => {
     })
   }
 }
+
+export const deleteEmployeeById = Id => async dispatch => {
+  const response = await axios.delete(`${baseUrl}/${FECTH_LIST_EMPLOYEE_URL}/${Id}`)
+  const { status = 0 } = response
+  if (status === 200) { 
+    dispatch(fecthListEmployee())
+  }
+}
+

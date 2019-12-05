@@ -5,8 +5,9 @@ import { getEmployeeById } from "./actions";
 import { connect } from "react-redux";
 import compose from "recompose/compose";
 import { get } from "lodash";
-import { Paper, Typography, Button } from "@material-ui/core";
+import { Paper, Typography, Button, IconButton } from "@material-ui/core";
 import InputComponent from "../../components/InputComponent/InputComponent";
+import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 
 const useStyles = () => ({
   root: {
@@ -64,6 +65,9 @@ class Detail extends React.Component {
             src={get(employee, "account.image", "")}
             alt=""
           />
+          <IconButton>
+            <AddAPhotoIcon color="primary"/>
+          </IconButton>
         </div>
         <div className={classes.right}>
           <div className={classes.profile}>
