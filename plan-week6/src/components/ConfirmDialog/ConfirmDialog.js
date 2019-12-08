@@ -31,8 +31,8 @@ class ConfirmDialog extends React.Component {
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
-                Do you want to remove employee <label style={{color: "blue"}}>{this.props.name}</label> ?
-            </DialogContentText>           
+              {this.props.message}
+            </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button variant="contained" onClick={this.props.onClickConfirmDeleteEmployee} color="primary">

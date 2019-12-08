@@ -4,14 +4,6 @@ import routes from "./routes";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 class App extends React.Component {
-  render() {
-    return (
-      <Router>
-        <div className="App">{this.showContentMenus(routes)}</div>
-      </Router>
-    );
-    
-  }
 
   showContentMenus = routes => {
     var result = null;
@@ -28,6 +20,14 @@ class App extends React.Component {
       });
     }
     return <Switch>{result}</Switch>;
+  }
+
+  render() {
+    return (
+      <Router>
+        <div className="App">{this.showContentMenus(routes)}</div>
+      </Router>
+    );
   }
 }
 

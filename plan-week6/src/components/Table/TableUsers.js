@@ -11,11 +11,13 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import { Link as RouterLink } from "react-router-dom";
 import AddEmComponent from "../AddEmComponent/AddEmComponent";
+import FormEdit from "../FormEdit/FormEdit";
 import ConfrimDialog from "../ConfirmDialog/ConfirmDialog";
 import {
   deleteEmployeeById,
   fecthListEmployee
 } from "../../containers/Home/actions";
+import { getEmployeeById } from "../../containers/Details/actions";
 import { connect } from "react-redux";
 import compose from "recompose/compose";
 
@@ -38,11 +40,19 @@ const useStyles = theme => ({
 class TableUsers extends React.Component {
   state = {
     openConfirmDialog: false,
+    openFormEdit: false,
     emName: '',
     emId: '',
   };
   componentDidMount() {
     this.props.fecthListEmployee();
+  }
+
+  onClickEdit = (Id) => {
+    this.setState({
+      openFormEdit: !this.state.openFormEdit
+    })
+    this.props.getEmployeeById(Id)
   }
 
   onClickDeleteButton = (Id, Fname, Lname) => {
@@ -65,12 +75,19 @@ class TableUsers extends React.Component {
   }
 
   render() {
-    console.log("id", this.state.emId,this.state.emName);
     const { classes } = this.props;
     const list = this.props.listEmployee;
+    const message = <span>
+      Do you want to remove employee <label style={{ color: "blue" }}>{this.state.emName}</label>
+    </span>
     return (
       <Paper className={classes.root}>
         <AddEmComponent />
+        <FormEdit
+          openFormEdit={this.state.openFormEdit}
+          onBackdropClick={() => { this.setState({ openFormEdit: false }) }}
+          Id={this.state.emId}
+        />
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
@@ -113,10 +130,10 @@ class TableUsers extends React.Component {
                 <TableCell align="right">{em.account.address.city}</TableCell>
                 <TableCell align="right">{em.account.userName}</TableCell>
                 <TableCell align="center">
-                  <IconButton>
+                  <IconButton onClick={() => this.onClickEdit(em.id)}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => this.onClickDeleteButton(em.id,em.first_name,em.last_name)}>
+                  <IconButton onClick={() => this.onClickDeleteButton(em.id, em.first_name, em.last_name)}>
                     <DeleteForeverIcon />
                   </IconButton>
                 </TableCell>
@@ -127,7 +144,7 @@ class TableUsers extends React.Component {
             openDialog={this.state.openConfirmDialog}
             onCloseConfirmDialog={this.onCloseConfirmDialog}
             onClickConfirmDeleteEmployee={this.onClickConfirmDeleteEmployee}
-            name={this.state.emName}
+            message={message}
           />
         </Table>
       </Paper>
@@ -145,6 +162,7 @@ export default compose(
   withStyles(useStyles),
   connect(mapStateToProps, {
     fecthListEmployee,
-    deleteEmployeeById
+    deleteEmployeeById,
+    getEmployeeById
   })
 )(TableUsers);
