@@ -23,28 +23,22 @@ export const deleteEmployeeById = Id => async dispatch => {
   }
 }
 
-export const createEmployee = (first_Name, last_Name, email) => async dispatch => {
-  const response = await axios.post(`${baseUrl}/${FECTH_LIST_EMPLOYEE_URL}`,
-    {
-      "first_name": first_Name,
-      "last_name": last_Name,
-      "title": "title",
-      "account": {
-        "email": email,
-        "image": "https://s3.amazonaws.com/uifaces/faces/twitter/adammarsbar/128.jpg",
-        "userName": "userName",
-        "address": {
-          "street": "street",
-          "city": "city",
-          "country": "country"
-        }
-      }
-    })
+export const createEmployee = (employee) => async dispatch => {
+  const response = await axios.post(`${baseUrl}/${FECTH_LIST_EMPLOYEE_URL}`, employee)
   const { status = 0 } = response
   if (status === 200) {
     dispatch(fecthListEmployee())
   }
 }
+
+export const updateEmployee = (employee, Id) =>  async dispatch =>{
+  const response = await axios.put(`${baseUrl}/${FECTH_LIST_EMPLOYEE_URL}/${Id}`, employee)
+  const { status = 0 } = response
+  if (status === 200) {
+    dispatch(fecthListEmployee())
+  }
+}
+
 
 
 

@@ -7,9 +7,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide from "@material-ui/core/Slide";
 import TextField from "@material-ui/core/TextField";
-import InputComponent from "../InputComponent/InputComponent";
-import { createEmployee } from "../../containers/Home/actions";
+import { createEmployee, updateEmployee } from "../../containers/Home/actions";
+import { resetEmployee } from "../../containers/Details/actions"
 import { connect } from "react-redux";
+import { get } from "lodash";
 import compose from "recompose/compose";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -18,11 +19,22 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 class DialogComponent extends React.Component {
   state = {
-    open: false,
-    fName: '',
-    lName: '',
+    first_Name: '',
+    last_Name: '',
+    title: '',
     email: '',
+    image: '',
+    userName: '',
+    street: '',
+    city: '',
+    country: '',
+    open: false,
+    id: ''
   };
+
+  componentWillUnmount() {
+    this.props.resetEmployee()
+  }
 
   handleClickOpen = () => {
     this.setState({
@@ -32,7 +44,7 @@ class DialogComponent extends React.Component {
 
   handleClose = () => {
     this.setState({
-      open: false
+      open: false,
     });
   };
 
@@ -40,12 +52,31 @@ class DialogComponent extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+
   onClickCreate = () => {
-    this.props.createEmployee(this.state.fName, this.state.lName, this.state.email)
+    const employee = {
+      first_name: this.state.first_Name,
+      last_name: this.state.last_Name,
+      title: this.state.title,
+      account: {
+        email: this.state.email,
+        image: this.state.image,
+        userName: this.state.userName,
+        address: {
+          street: this.state.street,
+          city: this.state.city,
+          country: this.state.country,
+        }
+      }
+    }
+    this.props.createEmployee(employee)
     this.handleClose()
   }
 
   render() {
+
+    const emPloyee = this.props.employee;
+    console.log('props', this.state.open, this.props.openEdit, emPloyee.id)
     return (
       <div>
         <Button
@@ -69,48 +100,25 @@ class DialogComponent extends React.Component {
         >
           <DialogTitle id="alert-dialog-slide-title">
             ADD EMPLOYEE
-          </DialogTitle>
+              </DialogTitle>
           <DialogContent>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              onChange={this.onChangeValue}
-              id="fName"
-              label="First Name"
-              name="fName"
-              autoComplete="fName"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              onChange={this.onChangeValue}
-              id="lName"
-              label="Last Name"
-              name="lName"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              onChange={this.onChangeValue}
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
+            <TextField fullWidth onChange={this.onChangeValue} label="First Name" name="first_Name" />
+            <TextField fullWidth onChange={this.onChangeValue} label="Last Name" name="last_Name" />
+            <TextField fullWidth onChange={this.onChangeValue} label="Email Address" name="email" />
+            <TextField fullWidth onChange={this.onChangeValue} label="Title" name="title" />
+            <TextField fullWidth onChange={this.onChangeValue} label="Image" name="image" />
+            <TextField fullWidth onChange={this.onChangeValue} label="User Name" name="userName" />
+            <TextField fullWidth onChange={this.onChangeValue} label="Street" name="street" />
+            <TextField fullWidth onChange={this.onChangeValue} label="Country" name="country" />
+            <TextField fullWidth onChange={this.onChangeValue} label="City" name="city" />
           </DialogContent>
           <DialogActions>
             <Button style={{ margin: '1rem' }} variant="contained" onClick={this.onClickCreate} color="primary">
               CREATE
-            </Button>
+                </Button>
             <Button style={{ margin: '1rem' }} variant="contained" onClick={this.handleClose} color="primary">
               CANCEL
-            </Button>
+                </Button>
           </DialogActions>
         </Dialog>
       </div>
@@ -120,11 +128,13 @@ class DialogComponent extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    //employee: state.DetailEmployeeReducer
+    employee: state.DetailEmployeeReducer
   };
 };
 
 export default compose(
   connect(mapStateToProps, {
-    createEmployee
+    createEmployee,
+    resetEmployee,
+    updateEmployee
   }))(DialogComponent);

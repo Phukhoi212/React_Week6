@@ -3,11 +3,11 @@ import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-//import DialogContentText from "@material-ui/core/DialogContentText";
+import TextField from "@material-ui/core/TextField";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide from "@material-ui/core/Slide";
 import InputComponent from "../InputComponent/InputComponent";
-// import { getEmployeeById } from "../../containers/Details/actions";
+import { updateEmployee } from "../../containers/Home/actions";
 import { connect } from "react-redux";
 import compose from "recompose/compose";
 import { get } from "lodash";
@@ -18,14 +18,18 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 class FormEdit extends React.Component {
   state = {
-    open: false
+    first_Name: '',
+    last_Name: '',
+    title: '',
+    email: '',
+    image: '',
+    userName: '',
+    street: '',
+    city: '',
+    country: '',
+    open: false,
+    id: ''
   };
-
-  // componentDidMount() {
-  //   // console.log("Id", this.props.match.params.id);
-  //   this.props.getEmployeeById(this.props.Id);
-  // }
-
 
   handleClose = () => {
     this.setState({
@@ -33,8 +37,33 @@ class FormEdit extends React.Component {
     });
   };
 
+  handleUpdateEm = (Id) => {
+    const employee = {
+      first_name: this.state.first_Name,
+      last_name: this.state.last_Name,
+      title: this.state.title,
+      account: {
+        email: this.state.email,
+        image: this.state.image,
+        userName: this.state.userName,
+        address: {
+          street: this.state.street,
+          city: this.state.city,
+          country: this.state.country,
+        }
+      }
+    }
+    this.props.updateEmployee(employee)
+    this.handleClose()
+  }
+
+  onChangeValue = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
   render() {
     const emPloyee = this.props.employee;
+
     return (
       <div>
         <Dialog
@@ -50,30 +79,30 @@ class FormEdit extends React.Component {
         >
           <DialogTitle id="alert-dialog-slide-title">
             EDIT EMPLOYEE
-          </DialogTitle>
+              </DialogTitle>
           <DialogContent>
-            <InputComponent text="First Name" value={emPloyee.first_name} />
-            <InputComponent text="Last Name" value={emPloyee.last_name} />
-            <InputComponent text="Title" value={emPloyee.title} />
-            <InputComponent text="Email" value={get(emPloyee.account, "email", "")} />
-            <InputComponent text="Image" value={get(emPloyee, "account.image", "")} />
+            <TextField fullWidth label="First Name" defaultValue={emPloyee.first_name} name="first_Name" />
+            <TextField fullWidth label="Last Name" value={emPloyee.last_name} name="last_Name" />
+            <TextField fullWidth label="Title" value={emPloyee.title} name="title" />
+            <TextField fullWidth label="Email" value={get(emPloyee.account, "email", "")} name="email" />
+            <TextField fullWidth label="Image" value={get(emPloyee, "account.image", "")} name="image" />
             <img
-              style={{margin: '2rem', width: 150, height: 200 }}
+              style={{ margin: '2rem', width: 150, height: 200 }}
               src={get(emPloyee, "account.image", "")}
               alt=""
             />
-            <InputComponent text="User Name" value={get(emPloyee.account, "userName", "")} />
-            <InputComponent text="Street" value={get(emPloyee.account, "address.street", "")} />
-            <InputComponent text="Country" value={get(emPloyee.account, "address.country", "")} />
-            <InputComponent text="City" value={get(emPloyee.account, "address.city", "")} />
+            <TextField fullWidth label="User Name" value={get(emPloyee.account, "userName", "")} name="userName" />
+            <TextField fullWidth label="Street" value={get(emPloyee.account, "address.street", "")} name="street" />
+            <TextField fullWidth label="Country" value={get(emPloyee.account, "address.country", "")} name="country" />
+            <TextField fullWidth label="City" value={get(emPloyee.account, "address.city", "")} name="city" />
           </DialogContent>
           <DialogActions>
-            <Button style={{ margin: '1rem' }} variant="contained" onClick={this.handleClose} color="primary">
+            <Button style={{ margin: '1rem' }} variant="contained" onClick={() => this.handleUpdateEm(emPloyee.id)} color="primary">
               SAVE
-            </Button>
+                </Button>
             <Button style={{ margin: '1rem' }} variant="contained" onClick={this.handleClose} color="primary">
               CANCEL
-            </Button>
+                </Button>
           </DialogActions>
         </Dialog>
       </div>
@@ -89,4 +118,5 @@ const mapStateToProps = state => {
 
 export default compose(
   connect(mapStateToProps, {
+    updateEmployee
   }))(FormEdit)

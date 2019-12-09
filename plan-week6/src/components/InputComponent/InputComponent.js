@@ -1,6 +1,6 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
-import { Input } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 
 const useStyles = () => ({
   root: {
@@ -29,7 +29,7 @@ class InputComponent extends React.Component {
     return (
       <div className={classes.root}>
         <label className={classes.text}>{this.props.text}</label>
-        <Input
+        <TextField
           name={this.props.name}
           onChange={this.onChangeValue}
           fullWidth

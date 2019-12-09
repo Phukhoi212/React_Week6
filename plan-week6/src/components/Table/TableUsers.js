@@ -50,7 +50,7 @@ class TableUsers extends React.Component {
 
   onClickEdit = (Id) => {
     this.setState({
-      openFormEdit: !this.state.openFormEdit
+      openFormEdit: true
     })
     this.props.getEmployeeById(Id)
   }
@@ -82,11 +82,11 @@ class TableUsers extends React.Component {
     </span>
     return (
       <Paper className={classes.root}>
-        <AddEmComponent />
+        <AddEmComponent
+        />
         <FormEdit
           openFormEdit={this.state.openFormEdit}
           onBackdropClick={() => { this.setState({ openFormEdit: false }) }}
-          Id={this.state.emId}
         />
         <Table className={classes.table}>
           <TableHead>

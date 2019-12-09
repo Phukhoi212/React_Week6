@@ -16,3 +16,9 @@ export const getEmployeeById = Id => async dispatch => {
   }
 }
 
+export const resetEmployee = () => dispatch => {
+  dispatch({
+    type: actions.RESET_EMPLOYEE
+  })
+}
+
