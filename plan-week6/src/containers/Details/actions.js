@@ -22,3 +22,14 @@ export const resetEmployee = () => dispatch => {
   })
 }
 
+export const updateEmployee = (employee, Id) =>  async dispatch =>{
+  const response = await axios.put(`${baseUrl}/${FECTH_LIST_EMPLOYEE_URL}/${Id}`, employee)
+  const { data = {},  status = 0 } = response
+  if (status === 200) {
+    dispatch({
+      type: actions.UPDATE_EMPLOYEE,
+      payload: data || {}
+    })
+  }
+}
+

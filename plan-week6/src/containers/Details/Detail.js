@@ -1,8 +1,7 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { withRouter } from "react-router";
-import { getEmployeeById, resetEmployee } from "./actions";
-import { updateEmployee } from "../Home/actions";
+import { getEmployeeById, resetEmployee, updateEmployee } from "./actions";
 import { connect } from "react-redux";
 import compose from "recompose/compose";
 import { get } from "lodash";
@@ -51,7 +50,7 @@ class Detail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      employee: {}
+      employ: {}
     };
   }
 
@@ -63,16 +62,8 @@ class Detail extends React.Component {
     this.props.resetEmployee();
   }
 
-  componentDidUpdate(prevState) {
-    console.log("prev", prevState.employee, this.state);
-    if (prevState.employee !== this.state.employee) {
-      console.log("here");
-    }
-  }
-
-  handleUpdateEm = Id => {
-    const employ = this.props.employee;
-    this.props.updateEmployee(employ, Id);
+  handleUpdateEm = Id => { 
+    this.props.updateEmployee(this.state.employee, Id);
     this.onClickBackButton();
   };
 

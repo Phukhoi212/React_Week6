@@ -31,13 +31,6 @@ export const createEmployee = (employee) => async dispatch => {
   }
 }
 
-export const updateEmployee = (employee, Id) =>  async dispatch =>{
-  const response = await axios.put(`${baseUrl}/${FECTH_LIST_EMPLOYEE_URL}/${Id}`, employee)
-  const { status = 0 } = response
-  if (status === 200) {
-    dispatch(fecthListEmployee())
-  }
-}
 
 
 
