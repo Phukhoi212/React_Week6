@@ -11,7 +11,6 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import { Link as RouterLink } from "react-router-dom";
 import AddEmComponent from "../AddEmComponent/AddEmComponent";
-import FormEdit from "../FormEdit/FormEdit";
 import ConfrimDialog from "../ConfirmDialog/ConfirmDialog";
 import {
   deleteEmployeeById,
@@ -44,16 +43,17 @@ class TableUsers extends React.Component {
     emName: '',
     emId: '',
   };
+  
   componentDidMount() {
     this.props.fecthListEmployee();
   }
 
-  onClickEdit = (Id) => {
-    this.setState({
-      openFormEdit: true
-    })
-    this.props.getEmployeeById(Id)
-  }
+  // onClickEdit = (Id) => {
+  //   this.setState({
+  //     openFormEdit: true
+  //   }, () => this.props.getEmployeeById(Id)
+  //   )
+  // }
 
   onClickDeleteButton = (Id, Fname, Lname) => {
     this.setState({
@@ -82,12 +82,7 @@ class TableUsers extends React.Component {
     </span>
     return (
       <Paper className={classes.root}>
-        <AddEmComponent
-        />
-        <FormEdit
-          openFormEdit={this.state.openFormEdit}
-          onBackdropClick={() => { this.setState({ openFormEdit: false }) }}
-        />
+        <AddEmComponent/>
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
@@ -130,9 +125,15 @@ class TableUsers extends React.Component {
                 <TableCell align="right">{em.account.address.city}</TableCell>
                 <TableCell align="right">{em.account.userName}</TableCell>
                 <TableCell align="center">
-                  <IconButton onClick={() => this.onClickEdit(em.id)}>
+                <RouterLink
+                    to={{
+                      pathname: `/employees/${em.id}`
+                    }}
+                  >
+                  <IconButton>
                     <EditIcon />
                   </IconButton>
+                  </RouterLink>
                   <IconButton onClick={() => this.onClickDeleteButton(em.id, em.first_name, em.last_name)}>
                     <DeleteForeverIcon />
                   </IconButton>

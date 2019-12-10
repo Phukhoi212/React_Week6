@@ -1,13 +1,13 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { withRouter } from "react-router";
-import { getEmployeeById } from "./actions";
+import { getEmployeeById, resetEmployee } from "./actions";
+import { updateEmployee } from "../Home/actions";
 import { connect } from "react-redux";
 import compose from "recompose/compose";
 import { get } from "lodash";
 import { Paper, Typography, Button, IconButton } from "@material-ui/core";
-import InputComponent from "../../components/InputComponent/InputComponent";
-import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
+import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 
 const useStyles = () => ({
   root: {
@@ -40,21 +40,53 @@ const useStyles = () => ({
   },
   btn: {
     margin: "1rem"
+  },
+  text: {
+    float: "left",
+    fontWeight: "bold"
   }
 });
 
 class Detail extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      employee: {}
+    };
+  }
+
   componentDidMount() {
-    console.log("Id", this.props.match.params.id);
     this.props.getEmployeeById(this.props.match.params.id);
   }
 
-  onClickBackButton= () => {
-    this.props.history.push("/");
+  componentWillUnmount() {
+    this.props.resetEmployee();
   }
 
+  componentDidUpdate(prevState) {
+    console.log("prev", prevState.employee, this.state);
+    if (prevState.employee !== this.state.employee) {
+      console.log("here");
+    }
+  }
+
+  handleUpdateEm = Id => {
+    const employ = this.props.employee;
+    this.props.updateEmployee(employ, Id);
+    this.onClickBackButton();
+  };
+
+  onChangeValue = e => {
+    console.log("logs", [e.target.name], e.target.value);
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  onClickBackButton = () => {
+    this.props.history.push("/");
+  };
+
   render() {
-    console.log("router", this.props);
+    console.log("--opop", this.state.employee);
     const { classes } = this.props;
     const employee = this.props.employee;
     return (
@@ -66,7 +98,7 @@ class Detail extends React.Component {
             alt=""
           />
           <IconButton>
-            <AddAPhotoIcon color="primary"/>
+            <AddAPhotoIcon color="primary" />
           </IconButton>
         </div>
         <div className={classes.right}>
@@ -75,46 +107,104 @@ class Detail extends React.Component {
               <Typography style={{ fontWeight: "bold", color: "blue" }}>
                 INFO
               </Typography>
-              <InputComponent text="First Name" value={employee.first_name} />
-              <InputComponent text="Last Name" value={employee.last_name} />
-              <InputComponent text="Title" value={employee.title} />
+              <label className={classes.text}>First Name</label>
+              <input
+                style={{ width: "100%", height: 40, border: "none" }}
+                fullWidth
+                defaultValue={employee.first_name}
+                name="first_Name"
+                onChange={this.onChangeValue}
+              />
+              <label className={classes.text}>Last Name</label>
+              <input
+                style={{ width: "100%", height: 40, border: "none" }}
+                fullWidth
+                label="Last Name"
+                defaultValue={employee.last_name}
+                name="last_Name"
+                onChange={this.onChangeValue}
+              />
+              <label className={classes.text}>Title</label>
+              <input
+                style={{ width: "100%", height: 40, border: "none" }}
+                fullWidth
+                label="Title"
+                defaultValue={employee.title}
+                name="title"
+                onChange={this.onChangeValue}
+              />
             </Paper>
             <Paper className={classes.info}>
               <Typography style={{ fontWeight: "bold", color: "blue" }}>
                 ADDRESS
               </Typography>
-              <InputComponent
-                text="City"
-                value={get(employee.account, "address.city", "")}
+              <label className={classes.text}>Street</label>
+              <input
+                style={{ width: "100%", height: 40, border: "none" }}
+                fullWidth
+                label="Street"
+                defaultValue={get(employee.account, "address.street", "")}
+                name="street"
+                onChange={this.onChangeValue}
               />
-              <InputComponent
-                text="Country"
-                value={get(employee.account, "address.country", "")}
+              <label className={classes.text}>Country</label>
+              <input
+                style={{ width: "100%", height: 40, border: "none" }}
+                fullWidth
+                label="Country"
+                defaultValue={get(employee.account, "address.country", "")}
+                name="country"
+                onChange={this.onChangeValue}
               />
-              <InputComponent
-                text="Street"
-                value={get(employee.account, "address.street", "")}
+              <label className={classes.text}>City</label>
+              <input
+                style={{ width: "100%", height: 40, border: "none" }}
+                fullWidth
+                label="City"
+                defaultValue={get(employee.account, "address.city", "")}
+                name="city"
+                onChange={this.onChangeValue}
               />
             </Paper>
             <Paper className={classes.info}>
               <Typography style={{ fontWeight: "bold", color: "blue" }}>
                 USER
               </Typography>
-              <InputComponent
-                text="User Name"
-                value={get(employee.account, "userName", "")}
+              <label className={classes.text}>User Name</label>
+              <input
+                style={{ width: "100%", height: 40, border: "none" }}
+                fullWidth
+                label="User Name"
+                defaultValue={get(employee.account, "userName", "")}
+                name="userName"
+                onChange={this.onChangeValue}
               />
-              <InputComponent
-                text="Email"
-                value={get(employee.account, "email", "")}
+              <label className={classes.text}>Email</label>
+              <input
+                style={{ width: "100%", height: 40, border: "none" }}
+                fullWidth
+                label="Email"
+                defaultValue={get(employee.account, "email", "")}
+                name="email"
+                onChange={this.onChangeValue}
               />
             </Paper>
           </div>
           <div className={classes.bt_gr}>
-            <Button className={classes.btn} variant="contained" color="default" onClick={this.onClickBackButton}>
+            <Button
+              className={classes.btn}
+              variant="contained"
+              color="default"
+              onClick={this.onClickBackButton}
+            >
               Back
             </Button>
-            <Button className={classes.btn} variant="contained" color="primary">
+            <Button
+              className={classes.btn}
+              onClick={() => this.handleUpdateEm(employee.id)}
+              variant="contained"
+              color="primary"
+            >
               Save
             </Button>
             <Button
@@ -140,6 +230,8 @@ const mapStateToProps = state => {
 export default compose(
   withStyles(useStyles),
   connect(mapStateToProps, {
-    getEmployeeById
+    getEmployeeById,
+    resetEmployee,
+    updateEmployee
   })
 )(withRouter(Detail));

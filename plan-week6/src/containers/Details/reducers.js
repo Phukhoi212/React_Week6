@@ -6,7 +6,7 @@ export default (state = {}, action) => {
     case actions.FECTH_EMPLOYEES:
       return action.payload || {}
     case actions.RESET_EMPLOYEE:
-      return state
+      return ""
     default:
       return state;
   }

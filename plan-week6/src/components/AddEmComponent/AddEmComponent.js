@@ -3,14 +3,11 @@ import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-//import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide from "@material-ui/core/Slide";
 import TextField from "@material-ui/core/TextField";
-import { createEmployee, updateEmployee } from "../../containers/Home/actions";
-import { resetEmployee } from "../../containers/Details/actions"
+import { createEmployee } from "../../containers/Home/actions";
 import { connect } from "react-redux";
-import { get } from "lodash";
 import compose from "recompose/compose";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -31,10 +28,6 @@ class DialogComponent extends React.Component {
     open: false,
     id: ''
   };
-
-  componentWillUnmount() {
-    this.props.resetEmployee()
-  }
 
   handleClickOpen = () => {
     this.setState({
@@ -74,9 +67,6 @@ class DialogComponent extends React.Component {
   }
 
   render() {
-
-    const emPloyee = this.props.employee;
-    console.log('props', this.state.open, this.props.openEdit, emPloyee.id)
     return (
       <div>
         <Button
@@ -135,6 +125,4 @@ const mapStateToProps = state => {
 export default compose(
   connect(mapStateToProps, {
     createEmployee,
-    resetEmployee,
-    updateEmployee
   }))(DialogComponent);
