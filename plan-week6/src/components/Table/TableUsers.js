@@ -39,21 +39,13 @@ const useStyles = theme => ({
 class TableUsers extends React.Component {
   state = {
     openConfirmDialog: false,
-    openFormEdit: false,
     emName: '',
     emId: '',
   };
   
   componentDidMount() {
-    this.props.fecthListEmployee();
+    this.props.fecthListEmployee()
   }
-
-  // onClickEdit = (Id) => {
-  //   this.setState({
-  //     openFormEdit: true
-  //   }, () => this.props.getEmployeeById(Id)
-  //   )
-  // }
 
   onClickDeleteButton = (Id, Fname, Lname) => {
     this.setState({

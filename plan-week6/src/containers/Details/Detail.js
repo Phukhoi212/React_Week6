@@ -7,6 +7,9 @@ import compose from "recompose/compose";
 import { get } from "lodash";
 import { Paper, Typography, Button, IconButton } from "@material-ui/core";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import DoneAllIcon from '@material-ui/icons/DoneAll';
 
 const useStyles = () => ({
   root: {
@@ -50,7 +53,8 @@ class Detail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      employ: {}
+      employ: {},
+      success: false
     };
   }
 
@@ -62,14 +66,34 @@ class Detail extends React.Component {
     this.props.resetEmployee();
   }
 
-  handleUpdateEm = Id => { 
-    this.props.updateEmployee(this.state.employee, Id);
-    this.onClickBackButton();
+  handleUpdateEm = Id => {
+    const employState = this.state.employ;
+    const employee = {
+      first_name: employState.first_name,
+      last_name: employState.last_name,
+      title: employState.title,
+      email: employState.email || get(employState.account, "email", ""),
+      image: employState.image || get(employState, "account.image", ""),
+      userName:
+        employState.userName || get(employState.account, "userName", ""),
+      street:
+        employState.street || get(employState.account, "address.street", ""),
+      city: employState.city || get(employState.account, "address.city", ""),
+      country:
+        employState.country || get(employState.account, "address.country", ""),
+      id: employState.id
+    };
+    this.props.updateEmployee(employee, Id);
+    this.setState({ success: true })
   };
 
   onChangeValue = e => {
-    console.log("logs", [e.target.name], e.target.value);
-    this.setState({ [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    this.setState(prevState => {
+      prevState = this.props.employee;
+      prevState[name] = value;
+      return { employ: prevState };
+    });
   };
 
   onClickBackButton = () => {
@@ -77,15 +101,14 @@ class Detail extends React.Component {
   };
 
   render() {
-    console.log("--opop", this.state.employee);
     const { classes } = this.props;
-    const employee = this.props.employee;
+    const employ = this.props.employee;
     return (
       <div className={classes.root}>
         <div className={classes.left}>
           <img
             className={classes.image}
-            src={get(employee, "account.image", "")}
+            src={get(employ, "account.image", "")}
             alt=""
           />
           <IconButton>
@@ -102,17 +125,17 @@ class Detail extends React.Component {
               <input
                 style={{ width: "100%", height: 40, border: "none" }}
                 fullWidth
-                defaultValue={employee.first_name}
-                name="first_Name"
+                defaultValue={employ.first_name}
+                name="first_name"
                 onChange={this.onChangeValue}
               />
               <label className={classes.text}>Last Name</label>
               <input
                 style={{ width: "100%", height: 40, border: "none" }}
                 fullWidth
-                label="Last Name"
-                defaultValue={employee.last_name}
-                name="last_Name"
+                label="Title"
+                defaultValue={employ.last_name}
+                name="last_name"
                 onChange={this.onChangeValue}
               />
               <label className={classes.text}>Title</label>
@@ -120,21 +143,21 @@ class Detail extends React.Component {
                 style={{ width: "100%", height: 40, border: "none" }}
                 fullWidth
                 label="Title"
-                defaultValue={employee.title}
+                defaultValue={employ.title}
                 name="title"
                 onChange={this.onChangeValue}
               />
             </Paper>
             <Paper className={classes.info}>
               <Typography style={{ fontWeight: "bold", color: "blue" }}>
-                ADDRESS
+                INFO
               </Typography>
               <label className={classes.text}>Street</label>
               <input
                 style={{ width: "100%", height: 40, border: "none" }}
                 fullWidth
                 label="Street"
-                defaultValue={get(employee.account, "address.street", "")}
+                defaultValue={get(employ.account, "address.street", "")}
                 name="street"
                 onChange={this.onChangeValue}
               />
@@ -143,7 +166,7 @@ class Detail extends React.Component {
                 style={{ width: "100%", height: 40, border: "none" }}
                 fullWidth
                 label="Country"
-                defaultValue={get(employee.account, "address.country", "")}
+                defaultValue={get(employ.account, "address.country", "")}
                 name="country"
                 onChange={this.onChangeValue}
               />
@@ -152,21 +175,21 @@ class Detail extends React.Component {
                 style={{ width: "100%", height: 40, border: "none" }}
                 fullWidth
                 label="City"
-                defaultValue={get(employee.account, "address.city", "")}
+                defaultValue={get(employ.account, "address.city", "")}
                 name="city"
                 onChange={this.onChangeValue}
               />
             </Paper>
             <Paper className={classes.info}>
               <Typography style={{ fontWeight: "bold", color: "blue" }}>
-                USER
+                INFO
               </Typography>
               <label className={classes.text}>User Name</label>
               <input
                 style={{ width: "100%", height: 40, border: "none" }}
                 fullWidth
                 label="User Name"
-                defaultValue={get(employee.account, "userName", "")}
+                defaultValue={get(employ.account, "userName", "")}
                 name="userName"
                 onChange={this.onChangeValue}
               />
@@ -175,7 +198,7 @@ class Detail extends React.Component {
                 style={{ width: "100%", height: 40, border: "none" }}
                 fullWidth
                 label="Email"
-                defaultValue={get(employee.account, "email", "")}
+                defaultValue={get(employ.account, "email", "")}
                 name="email"
                 onChange={this.onChangeValue}
               />
@@ -192,7 +215,7 @@ class Detail extends React.Component {
             </Button>
             <Button
               className={classes.btn}
-              onClick={() => this.handleUpdateEm(employee.id)}
+              onClick={() => this.handleUpdateEm(employ.id)}
               variant="contained"
               color="primary"
             >
@@ -207,6 +230,17 @@ class Detail extends React.Component {
             </Button>
           </div>
         </div>
+        <Dialog
+          open={this.state.success}
+          keepMounted
+          onClose={this.handleClose}
+          onBackdropClick={() => this.setState({ success: false })}
+          maxWidth="lg"
+        >
+          <DialogContent>
+            Update Success!!! <DoneAllIcon color="green"/>
+          </DialogContent>
+        </Dialog>
       </div>
     );
   }

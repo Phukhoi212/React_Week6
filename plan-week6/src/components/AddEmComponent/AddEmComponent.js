@@ -26,7 +26,8 @@ class DialogComponent extends React.Component {
     city: '',
     country: '',
     open: false,
-    id: ''
+    id: '', 
+    created: false
   };
 
   handleClickOpen = () => {
@@ -46,7 +47,8 @@ class DialogComponent extends React.Component {
   };
 
 
-  onClickCreate = () => {
+  onClickCreate = (e) => {
+    e.preventDefault();
     const employee = {
       first_name: this.state.first_Name,
       last_name: this.state.last_Name,
