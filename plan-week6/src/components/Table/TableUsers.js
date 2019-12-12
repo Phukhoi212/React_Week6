@@ -39,12 +39,12 @@ const useStyles = theme => ({
 class TableUsers extends React.Component {
   state = {
     openConfirmDialog: false,
-    emName: '',
-    emId: '',
+    emName: "",
+    emId: ""
   };
-  
+
   componentDidMount() {
-    this.props.fecthListEmployee()
+    this.props.fecthListEmployee();
   }
 
   onClickDeleteButton = (Id, Fname, Lname) => {
@@ -60,21 +60,24 @@ class TableUsers extends React.Component {
   };
 
   onClickConfirmDeleteEmployee = () => {
-    this.props.deleteEmployeeById(this.state.emId)
+    this.props.deleteEmployeeById(this.state.emId);
     this.setState({
       openConfirmDialog: false
-    })
-  }
+    });
+  };
 
   render() {
     const { classes } = this.props;
     const list = this.props.listEmployee;
-    const message = <span>
-      Do you want to remove employee <label style={{ color: "blue" }}>{this.state.emName}</label>
-    </span>
+    const message = (
+      <span>
+        Do you want to remove employee{" "}
+        <label style={{ color: "blue" }}>{this.state.emName}</label>
+      </span>
+    );
     return (
       <Paper className={classes.root}>
-        <AddEmComponent/>
+        <AddEmComponent />
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
@@ -104,29 +107,31 @@ class TableUsers extends React.Component {
                 <TableCell scope="row">{em.id}</TableCell>
 
                 <TableCell align="right">
-                  <RouterLink
-                    to={{
-                      pathname: `/employees/${em.id}`
-                    }}
-                  >
-                    {em.first_name} {em.last_name}
-                  </RouterLink>
+                  {em.first_name} {em.last_name}
                 </TableCell>
 
                 <TableCell align="right">{em.account.email}</TableCell>
                 <TableCell align="right">{em.account.address.city}</TableCell>
                 <TableCell align="right">{em.account.userName}</TableCell>
                 <TableCell align="center">
-                <RouterLink
+                  <RouterLink
                     to={{
                       pathname: `/employees/${em.id}`
                     }}
                   >
-                  <IconButton>
-                    <EditIcon />
-                  </IconButton>
+                    <IconButton>
+                      <EditIcon />
+                    </IconButton>
                   </RouterLink>
-                  <IconButton onClick={() => this.onClickDeleteButton(em.id, em.first_name, em.last_name)}>
+                  <IconButton
+                    onClick={() =>
+                      this.onClickDeleteButton(
+                        em.id,
+                        em.first_name,
+                        em.last_name
+                      )
+                    }
+                  >
                     <DeleteForeverIcon />
                   </IconButton>
                 </TableCell>

@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from "react-router";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -27,7 +28,6 @@ class DialogComponent extends React.Component {
     country: '',
     open: false,
     id: '', 
-    created: false
   };
 
   handleClickOpen = () => {
@@ -47,8 +47,7 @@ class DialogComponent extends React.Component {
   };
 
 
-  onClickCreate = (e) => {
-    e.preventDefault();
+  onClickCreate = () => {
     const employee = {
       first_name: this.state.first_Name,
       last_name: this.state.last_Name,
@@ -118,13 +117,8 @@ class DialogComponent extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    employee: state.DetailEmployeeReducer
-  };
-};
 
 export default compose(
-  connect(mapStateToProps, {
+  connect(null, {
     createEmployee,
-  }))(DialogComponent);
+  }))(withRouter(DialogComponent));
