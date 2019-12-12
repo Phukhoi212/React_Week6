@@ -16,7 +16,6 @@ import {
   deleteEmployeeById,
   fecthListEmployee
 } from "../../containers/Home/actions";
-import { getEmployeeById } from "../../containers/Details/actions";
 import { connect } from "react-redux";
 import compose from "recompose/compose";
 
@@ -40,12 +39,13 @@ class TableUsers extends React.Component {
   state = {
     openConfirmDialog: false,
     emName: "",
-    emId: ""
+    emId: "",
   };
 
   componentDidMount() {
     this.props.fecthListEmployee();
   }
+
 
   onClickDeleteButton = (Id, Fname, Lname) => {
     this.setState({
@@ -69,6 +69,7 @@ class TableUsers extends React.Component {
   render() {
     const { classes } = this.props;
     const list = this.props.listEmployee;
+    console.log("list", list)
     const message = (
       <span>
         Do you want to remove employee{" "}
@@ -161,6 +162,5 @@ export default compose(
   connect(mapStateToProps, {
     fecthListEmployee,
     deleteEmployeeById,
-    getEmployeeById
   })
 )(TableUsers);

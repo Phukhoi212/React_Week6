@@ -64,6 +64,7 @@ class DialogComponent extends React.Component {
       }
     }
     this.props.createEmployee(employee)
+    this.forceUpdate()
     this.handleClose()
   }
 
@@ -84,8 +85,6 @@ class DialogComponent extends React.Component {
           keepMounted
           onClose={this.handleClose}
           onBackdropClick={this.props.onBackdropClick}
-          aria-labelledby="alert-dialog-slide-title"
-          aria-describedby="alert-dialog-slide-description"
           maxWidth="md"
           fullWidth
         >
