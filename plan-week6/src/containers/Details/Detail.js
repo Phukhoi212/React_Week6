@@ -4,7 +4,7 @@ import { withRouter } from "react-router";
 import { getEmployeeById, resetEmployee, updateEmployee } from "./actions";
 import { connect } from "react-redux";
 import compose from "recompose/compose";
-import { get } from "lodash";
+import { get, isEmpty } from "lodash";
 import { Paper, Typography, Button, IconButton } from "@material-ui/core";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import Dialog from "@material-ui/core/Dialog";
@@ -54,7 +54,8 @@ class Detail extends React.Component {
     super(props);
     this.state = {
       employ: {},
-      success: false
+      success: false,
+      isDisable: false,
     };
   }
 
@@ -67,29 +68,7 @@ class Detail extends React.Component {
   }
 
   handleUpdateEm = Id => {
-    const employState = this.state.employ;
-    const employee = {
-      first_name: employState.first_name,
-      last_name: employState.last_name,
-      title: employState.title,
-      account: {
-        email: employState.email || get(employState.account, "email", ""),
-        image: employState.image || get(employState, "account.image", ""),
-        userName:
-          employState.userName || get(employState.account, "userName", ""),
-        address: {
-          street:
-            employState.street ||
-            get(employState.account, "address.street", ""),
-          city:
-            employState.city || get(employState.account, "address.city", ""),
-          country:
-            employState.country ||
-            get(employState.account, "address.country", ""),
-        }
-      }
-    };
-    this.props.updateEmployee(employee, Id);
+    this.props.updateEmployee(this.state.employ, Id);
     this.setState({ success: true });
   };
 
@@ -107,6 +86,7 @@ class Detail extends React.Component {
   };
 
   render() {
+    const isDisable = isEmpty(this.state.employ) ? true : false
     const { classes } = this.props;
     const employ = this.props.employee;
     return (
@@ -224,6 +204,7 @@ class Detail extends React.Component {
               onClick={() => this.handleUpdateEm(employ.id)}
               variant="contained"
               color="primary"
+              disabled={isDisable}
             >
               Save
             </Button>
