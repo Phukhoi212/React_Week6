@@ -9,7 +9,7 @@ import { Paper, Typography, Button, IconButton } from "@material-ui/core";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
-import DoneAllIcon from '@material-ui/icons/DoneAll';
+import DoneAllIcon from "@material-ui/icons/DoneAll";
 
 const useStyles = () => ({
   root: {
@@ -72,19 +72,25 @@ class Detail extends React.Component {
       first_name: employState.first_name,
       last_name: employState.last_name,
       title: employState.title,
-      email: employState.email || get(employState.account, "email", ""),
-      image: employState.image || get(employState, "account.image", ""),
-      userName:
-        employState.userName || get(employState.account, "userName", ""),
-      street:
-        employState.street || get(employState.account, "address.street", ""),
-      city: employState.city || get(employState.account, "address.city", ""),
-      country:
-        employState.country || get(employState.account, "address.country", ""),
-      id: employState.id
+      account: {
+        email: employState.email || get(employState.account, "email", ""),
+        image: employState.image || get(employState, "account.image", ""),
+        userName:
+          employState.userName || get(employState.account, "userName", ""),
+        address: {
+          street:
+            employState.street ||
+            get(employState.account, "address.street", ""),
+          city:
+            employState.city || get(employState.account, "address.city", ""),
+          country:
+            employState.country ||
+            get(employState.account, "address.country", ""),
+        }
+      }
     };
     this.props.updateEmployee(employee, Id);
-    this.setState({ success: true })
+    this.setState({ success: true });
   };
 
   onChangeValue = e => {
@@ -238,7 +244,7 @@ class Detail extends React.Component {
           maxWidth="lg"
         >
           <DialogContent>
-            Update Success!!! <DoneAllIcon color="green"/>
+            Update Success!!! <DoneAllIcon color="green" />
           </DialogContent>
         </Dialog>
       </div>

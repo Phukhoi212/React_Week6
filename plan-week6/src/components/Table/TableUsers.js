@@ -69,7 +69,6 @@ class TableUsers extends React.Component {
   render() {
     const { classes } = this.props;
     const list = this.props.listEmployee;
-    console.log("list", list)
     const message = (
       <span>
         Do you want to remove employee{" "}
