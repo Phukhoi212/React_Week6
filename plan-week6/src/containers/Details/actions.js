@@ -23,23 +23,23 @@ export const resetEmployee = () => dispatch => {
 }
 
 export const updateEmployee = (employee, Id) =>  async dispatch => {
-  // const em = {
-  //   id: employee.id,
-  //   first_name: employee.first_name,
-  //   last_name: employee.last_name,
-  //   title: employee.title,
-  //   account: {
-  //     email: employee.email,
-  //     image: employee.image,
-  //     userName: employee.userName,
-  //     address: {
-  //       street: employee.street,
-  //       city: employee.city,
-  //       country: employee.country,
-  //     }
-  //   }
-  // }
-  const response = await axios.put(`${baseUrl}/${FECTH_LIST_EMPLOYEE_URL}/${Id}`, employee)
+  const em = {
+    id: employee.id,
+    first_name: employee.first_name,
+    last_name: employee.last_name,
+    title: employee.title,
+    account: {
+      email: employee.email,
+      image: employee.image,
+      userName: employee.userName,
+      address: {
+        street: employee.street,
+        city: employee.city,
+        country: employee.country,
+      }
+    }
+  }
+  const response = await axios.put(`${baseUrl}/${FECTH_LIST_EMPLOYEE_URL}/${Id}`, em)
   const { data = {},  status = 0 } = response
   if (status === 200) {
     dispatch({

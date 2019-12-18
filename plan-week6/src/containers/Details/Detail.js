@@ -68,7 +68,24 @@ class Detail extends React.Component {
   }
 
   handleUpdateEm = Id => {
-    this.props.updateEmployee(this.state.employ, Id);
+    const employState = this.state.employ;
+    const em = {
+      first_name: employState.first_name,
+      last_name: employState.last_name,
+      title: employState.title,
+      email: employState.email || get(employState.account, "email", ""),
+      image: employState.image || get(employState, "account.image", ""),
+      userName:
+        employState.userName || get(employState.account, "userName", ""),
+      street:
+        employState.street || get(employState.account, "address.street", ""),
+      city: employState.city || get(employState.account, "address.city", ""),
+      country:
+        employState.country || get(employState.account, "address.country", ""),
+      id: employState.id
+
+    }
+    this.props.updateEmployee(em, Id);
     this.setState({ success: true });
   };
 
